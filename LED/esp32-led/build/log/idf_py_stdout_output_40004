@@ -1,0 +1,143 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1790
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xcf0
+load:0x403cb700,len:0x2d88
+entry 0x403c8928
+[0;32mI (27) boot: ESP-IDF v5.4-dev-826-g8760e6d2a7 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Jun  9 2024 01:28:16[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.1[0m
+[0;32mI (35) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (40) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 2MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (55) boot: Partition Table:[0m
+[0;32mI (58) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (66) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (73) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (81) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (88) boot: End of partition table[0m
+[0;32mI (92) esp_image: segment 0: paddr=00010020 vaddr=3c090020 size=20a08h (133640) map[0m
+[0;32mI (125) esp_image: segment 1: paddr=00030a30 vaddr=3fc99300 size=048d4h ( 18644) load[0m
+[0;32mI (129) esp_image: segment 2: paddr=0003530c vaddr=40374000 size=0ad0ch ( 44300) load[0m
+[0;32mI (140) esp_image: segment 3: paddr=00040020 vaddr=42000020 size=825b0h (533936) map[0m
+[0;32mI (236) esp_image: segment 4: paddr=000c25d8 vaddr=4037ed0c size=0a520h ( 42272) load[0m
+[0;32mI (255) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (255) boot: Disabling RNG early entropy source...[0m
+[0;32mI (266) cpu_start: Multicore app[0m
+[0;32mI (276) cpu_start: Pro cpu start user code[0m
+[0;32mI (276) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (276) app_init: Application information:[0m
+[0;32mI (279) app_init: Project name:     esp32-led[0m
+[0;32mI (284) app_init: App version:      514619c[0m
+[0;32mI (289) app_init: Compile time:     Jun  9 2024 01:27:59[0m
+[0;32mI (295) app_init: ELF file SHA256:  ef238122d...[0m
+[0;32mI (300) app_init: ESP-IDF:          v5.4-dev-826-g8760e6d2a7[0m
+[0;32mI (306) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (311) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (316) efuse_init: Chip rev:         v0.1[0m
+[0;32mI (321) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (328) heap_init: At 3FCA17D0 len 00047F40 (287 KiB): RAM[0m
+[0;32mI (334) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (340) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (347) heap_init: At 600FE100 len 00001EE8 (7 KiB): RTCRAM[0m
+[0;32mI (354) spi_flash: detected chip: generic[0m
+[0;32mI (357) spi_flash: flash io: dio[0m
+[0;33mW (361) spi_flash: Detected size(8192k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (375) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (381) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (389) main_task: Started on CPU0[0m
+[0;32mI (409) main_task: Calling app_main()[0m
+[0;32mI (429) pp: pp rom version: e7ae62f[0m
+[0;32mI (429) net80211: net80211 rom version: e7ae62f[0m
+I (439) wifi:wifi driver task: 3fcaba84, prio:23, stack:6656, core=0
+I (439) wifi:wifi firmware version: eb97ced
+I (449) wifi:wifi certification version: v7.0
+I (449) wifi:config NVS flash: enabled
+I (449) wifi:config nano formating: disabled
+I (449) wifi:Init data frame dynamic rx buffer num: 32
+I (449) wifi:Init static rx mgmt buffer num: 5
+I (459) wifi:Init management short buffer num: 32
+I (459) wifi:Init dynamic tx buffer num: 32
+I (469) wifi:Init static tx FG buffer num: 2
+I (469) wifi:Init static rx buffer size: 1600
+I (479) wifi:Init static rx buffer num: 10
+I (479) wifi:Init dynamic rx buffer num: 32
+[0;32mI (479) wifi_init: rx ba win: 6[0m
+[0;32mI (489) wifi_init: accept mbox: 6[0m
+[0;32mI (489) wifi_init: tcpip mbox: 32[0m
+[0;32mI (489) wifi_init: udp mbox: 6[0m
+[0;32mI (499) wifi_init: tcp mbox: 6[0m
+[0;32mI (499) wifi_init: tcp tx win: 5760[0m
+[0;32mI (509) wifi_init: tcp rx win: 5760[0m
+[0;32mI (509) wifi_init: tcp mss: 1440[0m
+[0;32mI (509) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (519) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (529) phy_init: phy_version 670,b7bc9b9,Apr 30 2024,10:54:13[0m
+I (569) wifi:mode : sta (f4:12:fa:40:62:5c)
+I (569) wifi:enable tsf
+[0;32mI (569) WIFI: STA initialization complete[0m
+[0;32mI (569) WIFI: Connecting to AP...[0m
+I (599) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+I (599) wifi:state: init -> auth (0xb0)
+I (1239) wifi:state: auth -> assoc (0x0)
+I (1649) wifi:state: assoc -> run (0x10)
+I (5619) wifi:state: run -> init (0x2c0)
+I (5619) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+[0;32mI (5619) WIFI: Disconnected from AP, reason: 2[0m
+[0;32mI (5629) WIFI: Reconnecting to AP...[0m
+[0;32mI (9039) WIFI: Disconnected from AP, reason: 205[0m
+[0;32mI (9039) WIFI: Reconnecting to AP...[0m
+I (10129) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+I (10129) wifi:state: init -> auth (0xb0)
+I (10549) wifi:state: auth -> assoc (0x0)
+I (11489) wifi:state: assoc -> run (0x10)
+I (15569) wifi:state: run -> init (0x2c0)
+I (15569) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+[0;32mI (15569) WIFI: Disconnected from AP, reason: 2[0m
+[0;32mI (15569) WIFI: Reconnecting to AP...[0m
+[0;32mI (18989) WIFI: Disconnected from AP, reason: 201[0m
+[0;32mI (18989) WIFI: Reconnecting to AP...[0m
+I (20069) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+I (20079) wifi:state: init -> auth (0xb0)
+I (20589) wifi:state: auth -> assoc (0x0)
+I (21009) wifi:state: assoc -> run (0x10)
+I (25619) wifi:state: run -> init (0x2c0)
+I (25619) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+[0;32mI (25619) WIFI: Disconnected from AP, reason: 2[0m
+[0;32mI (25629) WIFI: Reconnecting to AP...[0m
+[0;32mI (29039) WIFI: Disconnected from AP, reason: 205[0m
+[0;32mI (29039) WIFI: Reconnecting to AP...[0m
+I (30109) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+I (30109) wifi:state: init -> auth (0xb0)
+I (30319) wifi:state: auth -> assoc (0x0)
+I (30589) wifi:state: assoc -> run (0x10)
+I (34549) wifi:state: run -> init (0x2c0)
+I (34559) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+[0;32mI (34559) WIFI: Disconnected from AP, reason: 2[0m
+[0;32mI (34559) WIFI: Reconnecting to AP...[0m
+[0;32mI (37969) WIFI: Disconnected from AP, reason: 205[0m
+[0;32mI (37969) WIFI: Reconnecting to AP...[0m
+I (39049) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+I (39049) wifi:state: init -> auth (0xb0)
+I (39589) wifi:state: auth -> assoc (0x0)
+I (39919) wifi:state: assoc -> run (0x10)
+I (44379) wifi:state: run -> init (0x2c0)
+I (44379) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+[0;32mI (44379) WIFI: Disconnected from AP, reason: 2[0m
+[0;32mI (44379) WIFI: Reconnecting to AP...[0m
+[0;32mI (47799) WIFI: Disconnected from AP, reason: 205[0m
+[0;32mI (47799) WIFI: Reconnecting to AP...[0m
+I (48819) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+I (48819) wifi:state: init -> auth (0xb0)
+I (49819) wifi:state: auth -> init (0x200)
+I (49819) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0
+[0;32mI (49819) WIFI: Disconnected from AP, reason: 2[0m
+[0;32mI (49829) WIFI: Failed to connect to ap[0m
+[0;32mI (49829) WIFI: Failed to associate to AP, dying...[0m
+[0;32mI (49839) main_task: Returned from app_main()[0m
