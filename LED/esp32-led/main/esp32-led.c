@@ -33,7 +33,8 @@
 #define LED_STRIP_RMT_RES_HZ  (10 * 1000 * 1000)
 
 #define FIRMWARE_VERSION 1
-#define OTA_URL "http://192.168.0.106/jeeves/esp_led_ota/esp32_led.bin"
+#define OTA_URL "http://192.168.0.106/jeeves/esp_led_ota/esp32-led.bin"
+#define OTA_TASK_STACK_SIZE 8192
 
 
 /** GLOBALS **/
@@ -78,9 +79,6 @@ led_strip_handle_t configure_led(void)
     ESP_LOGI(TAG, "Created LED strip object with RMT backend");
     return led_strip;
 }
-
-
-
 
 
 //event handler for wifi events
@@ -130,6 +128,7 @@ esp_err_t check_for_updates(void) {
     esp_err_t ret = esp_https_ota(&config);
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "OTA update successful, restarting...");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
         esp_restart();
     } else {
         ESP_LOGE(TAG, "OTA update failed: %s", esp_err_to_name(ret));
@@ -143,11 +142,17 @@ int get_latest_version(void) {
     return 2; // Example: pretend we fetched version 2 from the server
 }
 
-void check_and_update_firmware(void) {
+void log_firmware_version(void) {
+    ESP_LOGI(TAG, "Current firmware version: %d", FIRMWARE_VERSION);
+}
+
+
+void ota_task(void *pvParameter) {
     int latest_version = get_latest_version();
     if (latest_version > FIRMWARE_VERSION) {
         ESP_LOGI(TAG, "New firmware version available: %d", latest_version);
         check_for_updates();
+        vTaskDelete(NULL);
     } else {
         ESP_LOGI(TAG, "No new firmware version available");
     }
@@ -252,6 +257,9 @@ void handle_led_command(led_strip_handle_t led_strip, const char* cmd) {
     } else if (strcmp(cmd, "OFF") == 0 || strcmp(cmd, "0") == 0) {
         ESP_ERROR_CHECK(led_strip_clear(led_strip));
         ESP_LOGI(TAG, "LED turned OFF");
+    } else if (strcmp(cmd, "OTA") == 0) {
+        ESP_LOGI(TAG, "Attempting checking for updates...");
+        xTaskCreate(&ota_task, "ota_task", OTA_TASK_STACK_SIZE, NULL, 5, NULL);
     } else {
         ESP_LOGI(TAG, "Unknown command: %s", cmd);
     }
@@ -264,6 +272,7 @@ esp_err_t connect_tcp_server(led_strip_handle_t led_strip) {
     serverInfo.sin_family = AF_INET;
     serverInfo.sin_addr.s_addr = inet_addr("192.168.0.106");
     serverInfo.sin_port = htons(12345);
+
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
@@ -308,7 +317,7 @@ void app_main(void)
       ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
-
+    log_firmware_version();
     //initialize LED
     led_strip_handle_t led_strip = configure_led();
 
@@ -320,11 +329,11 @@ void app_main(void)
 		ESP_LOGI(TAG, "Failed to associate to AP, dying...");
 		return;
 	}
-
+    log_firmware_version();
     ESP_LOGI(TAG, "Connected to AP, checking for OTA updates...");
 
     // Check and update firmware
-    check_and_update_firmware();
+    // xTaskCreate(&ota_task, "ota_task", OTA_TASK_STACK_SIZE, NULL, 5, NULL);
 	
     ESP_LOGI(TAG, "Connected to AP, starting TCP connection...");
     
