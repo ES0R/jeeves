@@ -7,7 +7,8 @@
 #include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
-
+#include "driver/gpio.h"
+#include "led_strip.h"
 #include "lwip/err.h"
 #include "lwip/sockets.h"
 #include "lwip/sys.h"
@@ -21,6 +22,9 @@
 #define TCP_FAILURE 1 << 1
 #define MAX_FAILURES 10
 
+#define LED_GPIO_PIN 48
+#define RMT_TX_CHANNEL RMT_CHANNEL_0
+
 /** GLOBALS **/
 
 // event group to contain status information
@@ -31,7 +35,14 @@ static int s_retry_num = 0;
 
 // task tag
 static const char *TAG = "WIFI";
+
+// onboard LED pin
+static led_strip_t *strip;
+led_strip_handle_t led_strip;
+
 /** FUNCTIONS **/
+
+
 
 //event handler for wifi events
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
@@ -70,6 +81,11 @@ static void ip_event_handler(void* arg, esp_event_base_t event_base,
     }
 
 }
+
+// void init_gpio() {
+//     gpio_reset_pin(ONBOARD_LED_PIN);
+//     gpio_set_direction(ONBOARD_LED_PIN, GPIO_MODE_OUTPUT);
+// }
 
 // connect to wifi and return the result
 esp_err_t connect_wifi()
@@ -160,40 +176,47 @@ esp_err_t connect_wifi()
 }
 
 // connect to the server and return the result
-esp_err_t connect_tcp_server(void)
-{
-	struct sockaddr_in serverInfo = {0};
-	char readBuffer[1024] = {0};
+void handle_led_command(const char* cmd) {
+    if (strcmp(cmd, "ON") == 0 || strcmp(cmd, "1") == 0) {
+        // Set the LED color to red
+        // strip->set_pixel(strip, 0, 255, 0, 0); // Red
+        // strip->refresh(strip, 100); // Refresh to apply changes
+        ESP_LOGI(TAG, "LED turned ON");
+    } else if (strcmp(cmd, "OFF") == 0 || strcmp(cmd, "0") == 0) {
+        // strip->clear(strip, 100); // Clear the LED
+        ESP_LOGI(TAG, "LED turned OFF");
+    } else {
+        ESP_LOGI(TAG, "Unknown command: %s", cmd);
+    }
+}
 
-	serverInfo.sin_family = AF_INET;
-	serverInfo.sin_addr.s_addr = inet_addr("192.168.0.100"); //0x0100007f;
-	serverInfo.sin_port = htons(12345);
+esp_err_t connect_tcp_server(void) {
+    struct sockaddr_in serverInfo = {0};
+    char readBuffer[1024] = {0};
 
+    serverInfo.sin_family = AF_INET;
+    serverInfo.sin_addr.s_addr = inet_addr("192.168.0.106");
+    serverInfo.sin_port = htons(12345);
 
-	int sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock < 0)
-	{
-		ESP_LOGE(TAG, "Failed to create a socket..?");
-		return TCP_FAILURE;
-	}
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0) {
+        ESP_LOGE(TAG, "Failed to create a socket..?");
+        return TCP_FAILURE;
+    }
 
+    if (connect(sock, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) != 0) {
+        ESP_LOGE(TAG, "Failed to connect to %s!", inet_ntoa(serverInfo.sin_addr.s_addr));
+        close(sock);
+        return TCP_FAILURE;
+    }
 
-	if (connect(sock, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) != 0)
-	{
-		ESP_LOGE(TAG, "Failed to connect to %s!", inet_ntoa(serverInfo.sin_addr.s_addr));
-		close(sock);
-		return TCP_FAILURE;
-	}
-
-	ESP_LOGI(TAG, "Connected to TCP server.");
+    ESP_LOGI(TAG, "Connected to TCP server.");
     while (1) {
-        int r = read(sock, readBuffer, sizeof(readBuffer)-1);
+        int r = read(sock, readBuffer, sizeof(readBuffer) - 1);
         if (r > 0) {
             readBuffer[r] = 0; // Null-terminate the received data
             ESP_LOGI(TAG, "Received: %s", readBuffer);
-            if (strcmp(readBuffer, "HELLO") == 0) {
-                ESP_LOGI(TAG, "WE DID IT!");
-            }
+            handle_led_command(readBuffer);
         } else if (r == 0) {
             ESP_LOGI(TAG, "Connection closed by server");
             break;
@@ -203,6 +226,7 @@ esp_err_t connect_tcp_server(void)
         }
     }
 
+    close(sock);
     return TCP_SUCCESS;
 }
 
@@ -217,6 +241,16 @@ void app_main(void)
       ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
+
+    //Initialize the LED strip
+    // rmt_config_t config = RMT_DEFAULT_CONFIG_TX(LED_GPIO_PIN, RMT_TX_CHANNEL);
+    // config.clk_div = 2; // Set clock divider
+    // ESP_ERROR_CHECK(rmt_config(&config));
+    // ESP_ERROR_CHECK(rmt_driver_install(config.channel, 0, 0));
+
+    // led_strip_config_t strip_config = LED_STRIP_DEFAULT_CONFIG(1, (led_strip_dev_t)RMT_TX_CHANNEL);
+    // strip = led_strip_new_rmt_ws2812(&strip_config);
+    // strip->clear(strip, 100); // Clear any previous data
 
     // connect to wireless AP
 	status = connect_wifi();

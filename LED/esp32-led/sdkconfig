@@ -637,7 +637,7 @@ CONFIG_TWAI_ERRATA_FIX_LISTEN_ONLY_DOM=y
 #
 # Legacy RMT Driver Configurations
 #
-# CONFIG_RMT_SUPPRESS_DEPRECATE_WARN is not set
+CONFIG_RMT_SUPPRESS_DEPRECATE_WARN=y
 # end of Legacy RMT Driver Configurations
 
 #

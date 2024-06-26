@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+LED/esp32-led/build/
+
 # Object files
 *.o
 *.ko

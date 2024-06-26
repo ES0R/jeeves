@@ -17,4 +17,5 @@ idf.py monitor
 - [ ] Interrupt instead of polling
 - [ ] GPIO stuff for LED
 - [ ] OTA for reconfiguration
+- [ ] Make NAS for http OTA
 
