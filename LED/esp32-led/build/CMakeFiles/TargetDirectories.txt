@@ -815,6 +815,13 @@ C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/wifi_provisioning/
 C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/wifi_provisioning/CMakeFiles/install.dir
 C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/wifi_provisioning/CMakeFiles/install/local.dir
 C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/wifi_provisioning/CMakeFiles/install/strip.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/__idf_espressif__led_strip.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/edit_cache.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/rebuild_cache.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/list_install_components.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/install.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/install/local.dir
+C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/espressif__led_strip/CMakeFiles/install/strip.dir
 C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/main/CMakeFiles/__idf_main.dir
 C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/main/CMakeFiles/edit_cache.dir
 C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build/esp-idf/main/CMakeFiles/rebuild_cache.dir
