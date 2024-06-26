@@ -15,6 +15,11 @@
 #include "lwip/netdb.h"
 #include "lwip/dns.h"
 #include "led_strip.h"
+// OTA
+#include "esp_http_client.h"
+#include "esp_ota_ops.h"
+#include "esp_https_ota.h"
+
 
 /** DEFINES **/
 #define WIFI_SUCCESS 1 << 0
@@ -26,6 +31,9 @@
 #define LED_STRIP_BLINK_GPIO  48
 #define LED_STRIP_LED_NUMBERS 1
 #define LED_STRIP_RMT_RES_HZ  (10 * 1000 * 1000)
+
+#define FIRMWARE_VERSION 1
+#define OTA_URL "http://192.168.0.106/jeeves/esp_led_ota/esp32_led.bin"
 
 
 /** GLOBALS **/
@@ -113,10 +121,37 @@ static void ip_event_handler(void* arg, esp_event_base_t event_base,
 
 }
 
-// void init_gpio() {
-//     gpio_reset_pin(ONBOARD_LED_PIN);
-//     gpio_set_direction(ONBOARD_LED_PIN, GPIO_MODE_OUTPUT);
-// }
+esp_err_t check_for_updates(void) {
+    esp_http_client_config_t config = {
+        .url = OTA_URL,
+        .cert_pem = NULL,
+    };
+
+    esp_err_t ret = esp_https_ota(&config);
+    if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "OTA update successful, restarting...");
+        esp_restart();
+    } else {
+        ESP_LOGE(TAG, "OTA update failed: %s", esp_err_to_name(ret));
+    }
+    return ret;
+}
+
+int get_latest_version(void) {
+    // For simplicity, assume we get the latest version number from a predefined URL
+    // In practice, implement the HTTP GET request to fetch the version
+    return 2; // Example: pretend we fetched version 2 from the server
+}
+
+void check_and_update_firmware(void) {
+    int latest_version = get_latest_version();
+    if (latest_version > FIRMWARE_VERSION) {
+        ESP_LOGI(TAG, "New firmware version available: %d", latest_version);
+        check_for_updates();
+    } else {
+        ESP_LOGI(TAG, "No new firmware version available");
+    }
+}
 
 // connect to wifi and return the result
 esp_err_t connect_wifi()
@@ -285,6 +320,11 @@ void app_main(void)
 		ESP_LOGI(TAG, "Failed to associate to AP, dying...");
 		return;
 	}
+
+    ESP_LOGI(TAG, "Connected to AP, checking for OTA updates...");
+
+    // Check and update firmware
+    check_and_update_firmware();
 	
     ESP_LOGI(TAG, "Connected to AP, starting TCP connection...");
     
