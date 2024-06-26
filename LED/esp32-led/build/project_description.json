@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "esp32-led",
-    "project_version":    "082026a-dirty",
+    "project_version":    "a7ad7b0-dirty",
     "project_path":       "C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led",
     "idf_path":           "C:/Users/emilo/ws/Projects/esp-idf",
     "build_dir":          "C:/Users/emilo/ws/Projects/jeeves/LED/esp32-led/build",

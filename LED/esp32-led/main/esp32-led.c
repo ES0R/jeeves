@@ -19,7 +19,8 @@
 #include "esp_http_client.h"
 #include "esp_ota_ops.h"
 #include "esp_https_ota.h"
-
+#include "esp_http_client.h"
+#include "cJSON.h"
 
 /** DEFINES **/
 #define WIFI_SUCCESS 1 << 0
@@ -49,6 +50,23 @@ static int s_retry_num = 0;
 static const char *TAG = "WIFI";
 
 // global
+
+esp_err_t test_http_access(void) {
+    esp_http_client_config_t config = {
+        .url = OTA_URL,
+        .timeout_ms = 5000,  // Set timeout for the request
+    };
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        int content_length = esp_http_client_get_content_length(client);
+        ESP_LOGI(TAG, "HTTP GET successful, content length: %d", content_length);
+    } else {
+        ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+    }
+    esp_http_client_cleanup(client);
+    return err;
+}
 
 /** FUNCTIONS **/
 led_strip_handle_t configure_led(void)
@@ -317,7 +335,6 @@ void app_main(void)
       ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
-    log_firmware_version();
     //initialize LED
     led_strip_handle_t led_strip = configure_led();
 
@@ -332,8 +349,16 @@ void app_main(void)
     log_firmware_version();
     ESP_LOGI(TAG, "Connected to AP, checking for OTA updates...");
 
-    // Check and update firmware
-    // xTaskCreate(&ota_task, "ota_task", OTA_TASK_STACK_SIZE, NULL, 5, NULL);
+    // Test access to the OTA file
+    if (test_http_access() != ESP_OK) {
+        ESP_LOGI(TAG, "Failed to access OTA file, skipping update...");
+    } else {
+        ESP_LOGI(TAG, "OTA file accessible, checking for updates...");
+        xTaskCreate(&ota_task, "ota_task", OTA_TASK_STACK_SIZE, NULL, 5, NULL);
+    }
+
+    // Delay to ensure OTA task has time to complete
+    vTaskDelay(10000 / portTICK_PERIOD_MS);
 	
     ESP_LOGI(TAG, "Connected to AP, starting TCP connection...");
     
